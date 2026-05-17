@@ -745,7 +745,11 @@ export function getHonchoClientOptions(config: HonchoCLAUDEConfig): HonchoClient
     apiKey: config.apiKey,
     baseURL: getHonchoBaseUrl(config),
     workspaceId: config.workspace,
-    timeout: 8000,
+    // 60s default — MiniMax dialectic calls regularly take 20–30s, so the
+    // upstream 8s ceiling cancels every non-trivial chat. Background hooks
+    // have their own session-end hard timeout, so a generous SDK timeout
+    // here is safe.
+    timeout: 60000,
     maxRetries: 1,
   };
 }
