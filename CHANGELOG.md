@@ -2,6 +2,12 @@
 
 All notable changes to claude-honcho will be documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- `workspaceRules` config field — cwd-prefix-based workspace routing for installs that span multiple Honcho workspaces (e.g. work / personal / experiments). Rules are checked in order, first matching `cwdPrefix` wins, and `~` is expanded to `$HOME`. Takes precedence over the `globalOverride`, host-block, and default workspace resolution layers when any rule matches; falls through unchanged when none do, so single-workspace setups are unaffected.
+
 ## [0.2.4] - 2026-04-01
 
 ### Added
