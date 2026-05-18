@@ -35,9 +35,11 @@ export function resolveWorkspaceFromCwd(
   rules?: WorkspaceRule[],
 ): string | null {
   if (!rules || rules.length === 0) return null;
-  const normalized = cwd.replace(/\/+$/, "");
+  const normalized = cwd.replace(/\\/g, "/").replace(/\/+$/, "");
   for (const rule of rules) {
-    const prefix = expandHome(rule.cwdPrefix).replace(/\/+$/, "");
+    const prefix = expandHome(rule.cwdPrefix)
+      .replace(/\\/g, "/")
+      .replace(/\/+$/, "");
     if (normalized === prefix || normalized.startsWith(prefix + "/")) {
       return rule.workspace;
     }

@@ -92,6 +92,48 @@ describe("resolveWorkspaceFromCwd", () => {
     ).toBe("work");
   });
 
+  test("matches Windows-style backslash cwd against forward-slash prefix", () => {
+    const rules: WorkspaceRule[] = [
+      { cwdPrefix: "C:/Users/alice/work", workspace: "work" },
+    ];
+    expect(
+      resolveWorkspaceFromCwd("C:\\Users\\alice\\work", rules),
+    ).toBe("work");
+    expect(
+      resolveWorkspaceFromCwd("C:\\Users\\alice\\work\\project-a", rules),
+    ).toBe("work");
+  });
+
+  test("matches Windows-style backslash cwd against backslash prefix", () => {
+    const rules: WorkspaceRule[] = [
+      { cwdPrefix: "C:\\Users\\alice\\work", workspace: "work" },
+    ];
+    expect(
+      resolveWorkspaceFromCwd("C:\\Users\\alice\\work", rules),
+    ).toBe("work");
+    expect(
+      resolveWorkspaceFromCwd("C:\\Users\\alice\\work\\project-a", rules),
+    ).toBe("work");
+  });
+
+  test("does not match Windows sibling directory", () => {
+    const rules: WorkspaceRule[] = [
+      { cwdPrefix: "C:\\Users\\alice\\work", workspace: "work" },
+    ];
+    expect(
+      resolveWorkspaceFromCwd("C:\\Users\\alice\\work-old", rules),
+    ).toBeNull();
+  });
+
+  test("normalises trailing backslash on Windows cwd", () => {
+    const rules: WorkspaceRule[] = [
+      { cwdPrefix: "C:\\Users\\alice\\work", workspace: "work" },
+    ];
+    expect(
+      resolveWorkspaceFromCwd("C:\\Users\\alice\\work\\", rules),
+    ).toBe("work");
+  });
+
   test("respects rule order when multiple rules could match", () => {
     const ruleA: WorkspaceRule[] = [
       { cwdPrefix: "/a", workspace: "first" },
